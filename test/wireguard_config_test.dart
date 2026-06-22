@@ -18,11 +18,11 @@ PersistentKeepalive = 25
 ''';
 
       final config = WireguardConfig.fromString(confString);
-      
+
       expect(config.interface.privateKey, 'aaaaaa');
       expect(config.interface.address, '10.0.0.1/24');
       expect(config.interface.listenPort, 51820);
-      
+
       expect(config.peers, hasLength(1));
       final peer = config.peers.first;
       expect(peer.publicKey, 'bbbbbb');
@@ -49,10 +49,10 @@ Endpoint = test.example.com:51820
 ''';
 
       final config = WireguardConfig.fromString(confString);
-      
+
       expect(config.interface.privateKey, 'private_key_here');
       expect(config.interface.address, isNull);
-      
+
       expect(config.peers, hasLength(2));
       expect(config.peers[0].publicKey, 'pub_key_1');
       expect(config.peers[1].publicKey, 'pub_key_2');
@@ -64,7 +64,10 @@ Endpoint = test.example.com:51820
 [Peer]
 PublicKey = bbbbbb
 ''';
-      expect(() => WireguardConfig.fromString(confString), throwsFormatException);
+      expect(
+        () => WireguardConfig.fromString(confString),
+        throwsFormatException,
+      );
     });
   });
 }

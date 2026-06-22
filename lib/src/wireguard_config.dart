@@ -5,10 +5,7 @@ class WireguardConfig {
   final WireguardInterface interface;
   final List<WireguardPeer> peers;
 
-  WireguardConfig({
-    required this.interface,
-    this.peers = const [],
-  });
+  WireguardConfig({required this.interface, this.peers = const []});
 
   /// Reads a WireGuard configuration from a .conf file.
   factory WireguardConfig.fromFile(String path) {
@@ -22,10 +19,10 @@ class WireguardConfig {
   /// Parses a WireGuard configuration from a string.
   factory WireguardConfig.fromString(String content) {
     final lines = content.split('\n');
-    
+
     WireguardInterface? currentInterface;
     final List<WireguardPeer> peers = [];
-    
+
     String? currentSection;
     Map<String, String> sectionData = {};
 
@@ -43,7 +40,7 @@ class WireguardConfig {
       if (line.isEmpty || line.startsWith('#')) {
         continue;
       }
-      
+
       if (line.startsWith('[') && line.endsWith(']')) {
         processSection();
         currentSection = line.substring(1, line.length - 1);
@@ -59,13 +56,12 @@ class WireguardConfig {
     processSection(); // Process the last section
 
     if (currentInterface == null) {
-      throw const FormatException('No [Interface] section found in WireGuard config');
+      throw const FormatException(
+        'No [Interface] section found in WireGuard config',
+      );
     }
 
-    return WireguardConfig(
-      interface: currentInterface!,
-      peers: peers,
-    );
+    return WireguardConfig(interface: currentInterface!, peers: peers);
   }
 }
 
@@ -75,11 +71,7 @@ class WireguardInterface {
   final String? address;
   final int? listenPort;
 
-  WireguardInterface({
-    required this.privateKey,
-    this.address,
-    this.listenPort,
-  });
+  WireguardInterface({required this.privateKey, this.address, this.listenPort});
 
   factory WireguardInterface.fromMap(Map<String, String> map) {
     if (!map.containsKey('PrivateKey')) {
@@ -88,7 +80,9 @@ class WireguardInterface {
     return WireguardInterface(
       privateKey: map['PrivateKey']!,
       address: map['Address'],
-      listenPort: map.containsKey('ListenPort') ? int.tryParse(map['ListenPort']!) : null,
+      listenPort: map.containsKey('ListenPort')
+          ? int.tryParse(map['ListenPort']!)
+          : null,
     );
   }
 }
@@ -118,8 +112,8 @@ class WireguardPeer {
       endpoint: map['Endpoint'],
       allowedIPs: map['AllowedIPs'],
       presharedKey: map['PresharedKey'],
-      persistentKeepalive: map.containsKey('PersistentKeepalive') 
-          ? int.tryParse(map['PersistentKeepalive']!) 
+      persistentKeepalive: map.containsKey('PersistentKeepalive')
+          ? int.tryParse(map['PersistentKeepalive']!)
           : null,
     );
   }
