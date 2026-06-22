@@ -78,7 +78,8 @@ class WireguardTunnel {
 
         if (result.exitCode != 0 && !stderrLower.contains('already exists')) {
           if (stderrLower.contains('access is denied') ||
-              stderrLower.contains('permission denied')) {
+              stderrLower.contains('permission denied') ||
+              stderrLower.contains('requires elevation')) {
             if (silent) {
               throw ProcessException(
                 wireguardExe,
@@ -224,7 +225,8 @@ class WireguardTunnel {
 
         if (result.exitCode != 0 && !stderrLower.contains('does not exist')) {
           if (stderrLower.contains('access is denied') ||
-              stderrLower.contains('permission denied')) {
+              stderrLower.contains('permission denied') ||
+              stderrLower.contains('requires elevation')) {
             if (!silent) {
               _print(
                 'WireGuard requires Administrator privileges to stop. Requesting elevation...',
